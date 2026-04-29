@@ -1,0 +1,16 @@
+# Compilados y binarios
+programa
+sga
+*.o
+*.out
+
+# Directorio de CMake
+build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Archivos de salida (generados por tu código o python)
+salida.csv
+*.png
