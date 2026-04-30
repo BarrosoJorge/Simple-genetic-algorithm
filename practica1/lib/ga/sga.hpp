@@ -7,10 +7,11 @@
    LIDIA
  */
 
+#include "math/dataset.h"
 #include <cmath>
+#include <functional>
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
 typedef unsigned char BYTE;
@@ -47,6 +48,8 @@ private:
   float probabilidad_cruza;
   vector<float> X;
   vector<float> Y;
+  unsigned int m;
+  std::function<float(const std::vector<float> &)> funcion_objetivo;
 
 public:
   algoritmogeneticsimple(unsigned int _tamaño_poblacion,
@@ -55,7 +58,8 @@ public:
                          const vector<float> &_limites_superiores,
                          const vector<float> &_limites_inferiores,
                          const float &probabilidad_cruza,
-                         const float &probabilidad_mutacion);
+                         const float &probabilidad_mutacion,
+                         const unsigned int &m);
 
   ~algoritmogeneticsimple();
 
@@ -73,5 +77,6 @@ public:
   void Elitismo(void);
   unsigned int ObtenerMejor(void);
   float ObtenerMejorObjetivo(void);
-  void fit(const vector<float> &X, const vector<float> &Y);
+  void fit();
+  void fit_gaussian(const DataSet &d);
 }; // FIN DE LA CLASE
