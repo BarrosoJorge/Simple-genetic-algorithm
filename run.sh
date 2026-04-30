@@ -4,7 +4,7 @@
 mkdir -p build
 cd build
 
-# Generar Makefiles y compilar
+# Generar Makefiles y compilara
 cmake ..
 make
 
