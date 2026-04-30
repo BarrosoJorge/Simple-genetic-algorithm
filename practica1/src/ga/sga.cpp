@@ -8,13 +8,16 @@
  */
 
 #include "ga/sga.hpp"
+#include "math/dataset.h"
+#include "math/loss.hpp"
+#include <vector>
 
 algoritmogeneticsimple::algoritmogeneticsimple(
     unsigned int _tamaño_poblacion, unsigned int _num_genes,
     const vector<unsigned int> &_bits_por_gen,
     const vector<float> &_limites_superiores,
     const vector<float> &_limites_inferiores, const float &probabilidad_cruza,
-    const float &probabilidad_mutacion) {
+    const float &probabilidad_mutacion, const unsigned int &m) {
   this->tamaño_poblacion = _tamaño_poblacion;
   this->num_genes = _num_genes;
   this->bits_por_gen = _bits_por_gen;
@@ -23,7 +26,7 @@ algoritmogeneticsimple::algoritmogeneticsimple(
   this->probabilidad_cruza = probabilidad_cruza;
   this->probabilidad_mutacion = probabilidad_mutacion;
   this->tamaño_cromosoma = 0;
-
+  this->m = m;
   // Calcular el tamaño del cromosoma
   for (unsigned int k = 0; k < this->num_genes; k++)
     this->tamaño_cromosoma += this->bits_por_gen[k];
@@ -334,12 +337,15 @@ float algoritmogeneticsimple::ObtenerMejorObjetivo(void) {
 }
 
 float algoritmogeneticsimple::FuncionObjetivo(unsigned int _id_individuo) {
-  float objeto = 0.0;
-  return objeto;
+  return this->funcion_objetivo(this->poblacion[_id_individuo].valores_reales);
+  // Error de tipado y aqui se refleja, la funcion lambda espera const
+  // std::vector<float>& Mientras que esta recvibiendo un float*, tipado
+  // incompatible
 }
 
-void algoritmogeneticsimple::fit(const vector<float> &X,
-                                 const vector<float> &Y) {
-  this->X = X;
-  this->Y = Y;
+void algoritmogeneticsimple::fit() {}
+void algoritmogeneticsimple::fit_gaussian(const DataSet &d) {
+  auto model = create_gaussian_model(this->m);
+  this->funcion_objetivo = create_mse(d, model);
+  this->fit();
 }
