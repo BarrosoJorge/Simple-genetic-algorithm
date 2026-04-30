@@ -7,8 +7,8 @@
    LIDIA
  */
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -43,15 +43,19 @@ private:
   float promedio_objetivos;
   float suma_aptitud;
   float promedio_aptitud;
-  int funcion_seleccionada;   //función benchmark configurable
+  float probabilidad_mutacion;
+  float probabilidad_cruza;
+  vector<float> X;
+  vector<float> Y;
 
 public:
   algoritmogeneticsimple(unsigned int _tamaño_poblacion,
                          unsigned int _num_genes,
-                         const vector<unsigned int>& _bits_por_gen,
-                         const vector<float>& _limites_superiores,
-                         const vector<float>& _limites_inferiores,
-                         int _funcion_seleccionada = 1);  // parámetro de función
+                         const vector<unsigned int> &_bits_por_gen,
+                         const vector<float> &_limites_superiores,
+                         const vector<float> &_limites_inferiores,
+                         const float &probabilidad_cruza,
+                         const float &probabilidad_mutacion);
 
   ~algoritmogeneticsimple();
 
@@ -69,5 +73,5 @@ public:
   void Elitismo(void);
   unsigned int ObtenerMejor(void);
   float ObtenerMejorObjetivo(void);
-
-};  // FIN DE LA CLASE
+  void fit(const vector<float> &X, const vector<float> &Y);
+}; // FIN DE LA CLASE

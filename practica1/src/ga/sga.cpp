@@ -13,13 +13,15 @@ algoritmogeneticsimple::algoritmogeneticsimple(
     unsigned int _tamaño_poblacion, unsigned int _num_genes,
     const vector<unsigned int> &_bits_por_gen,
     const vector<float> &_limites_superiores,
-    const vector<float> &_limites_inferiores, int _funcion_seleccionada) {
+    const vector<float> &_limites_inferiores, const float &probabilidad_cruza,
+    const float &probabilidad_mutacion) {
   this->tamaño_poblacion = _tamaño_poblacion;
   this->num_genes = _num_genes;
   this->bits_por_gen = _bits_por_gen;
   this->limites_superiores = _limites_superiores;
   this->limites_inferiores = _limites_inferiores;
-  this->funcion_seleccionada = _funcion_seleccionada;
+  this->probabilidad_cruza = probabilidad_cruza;
+  this->probabilidad_mutacion = probabilidad_mutacion;
   this->tamaño_cromosoma = 0;
 
   // Calcular el tamaño del cromosoma
@@ -332,114 +334,12 @@ float algoritmogeneticsimple::ObtenerMejorObjetivo(void) {
 }
 
 float algoritmogeneticsimple::FuncionObjetivo(unsigned int _id_individuo) {
-  float valor_objetivo = 0.0f;
-  int n = this->num_genes;
-  const float PI = 3.14159265358979f;
+  float objeto = 0.0;
+  return objeto;
+}
 
-  switch (this->funcion_seleccionada) { // usa miembro de clase
-
-  // ── f1: Sphere
-  // f1(x) = sum(xi^2),  rango [-5.12, 5.12],  minimo = 0
-  case 1: {
-    for (int i = 0; i < n; i++) {
-      float xi = this->poblacion[_id_individuo].valores_reales[i];
-      valor_objetivo += xi * xi;
-    }
-    break;
-  }
-
-  // ── f4: Quartic with noise
-  // f4(x) = max |xi|,  rango [-100, 100],  minimo = 0
-  case 4: {
-    float max_val = 0.0f;
-    for (int i = 0; i < n; i++) {
-      float abs_xi =
-          std::fabs(this->poblacion[_id_individuo].valores_reales[i]);
-      if (abs_xi > max_val)
-        max_val = abs_xi;
-    }
-    valor_objetivo = max_val;
-    break;
-  }
-
-  // ── f5: Rosenbrock
-  // f5(x) = sum(100*(xi+1 - xi^2)^2 + (xi-1)^2),  rango [-30, 30],  minimo = 0
-  case 5: {
-    for (int i = 0; i < n - 1; i++) {
-      float xi = this->poblacion[_id_individuo].valores_reales[i];
-      float xi_next = this->poblacion[_id_individuo].valores_reales[i + 1];
-      valor_objetivo +=
-          100.0f * std::pow(xi_next - xi * xi, 2) + std::pow(xi - 1.0f, 2);
-    }
-    break;
-  }
-
-  // ── f9: Rastrigin
-  // f9(x) = sum(xi^2 - 10*cos(2*pi*xi) + 10),  rango [-5.12, 5.12],  minimo = 0
-  case 9: {
-    for (int i = 0; i < n; i++) {
-      float xi = this->poblacion[_id_individuo].valores_reales[i];
-      valor_objetivo += xi * xi - 10.0f * std::cos(2.0f * PI * xi) + 10.0f;
-    }
-    break;
-  }
-
-  // ── f10: Ackley
-  // rango [-32, 32],  minimo = 0
-  case 10: {
-    float suma_cuad = 0.0f, suma_cos = 0.0f;
-    for (int i = 0; i < n; i++) {
-      float xi = this->poblacion[_id_individuo].valores_reales[i];
-      suma_cuad += xi * xi;
-      suma_cos += std::cos(2.0f * PI * xi);
-    }
-    valor_objetivo = -20.0f * std::exp(-0.2f * std::sqrt(suma_cuad / n)) -
-                     std::exp(suma_cos / n) + 20.0f + (float)M_E;
-    break;
-  }
-
-  // ── f12:
-  // rango [-50, 50],  minimo = 0
-  case 12: {
-    auto calc_y = [](float x) { return 1.0f + 0.25f * (x + 1.0f); };
-    auto calc_u = [](float x, float a, float b, float c) -> float {
-      if (x > a)
-        return b * std::pow(x - a, c);
-      if (x < -a)
-        return b * std::pow(-x - a, c);
-      return 0.0f;
-    };
-
-    float y_primero = calc_y(this->poblacion[_id_individuo].valores_reales[0]);
-    float y_ultimo =
-        calc_y(this->poblacion[_id_individuo].valores_reales[n - 1]);
-
-    float suma_y = 0.0f;
-    for (int i = 0; i < n - 1; i++) {
-      float yi = calc_y(this->poblacion[_id_individuo].valores_reales[i]);
-      float yi_next =
-          calc_y(this->poblacion[_id_individuo].valores_reales[i + 1]);
-      suma_y += std::pow(yi - 1.0f, 2) *
-                (1.0f + 10.0f * std::pow(std::sin(PI * yi_next), 2));
-    }
-
-    float suma_u = 0.0f;
-    for (int i = 0; i < n; i++)
-      suma_u += calc_u(this->poblacion[_id_individuo].valores_reales[i], 10.0f,
-                       100.0f, 4.0f);
-
-    valor_objetivo = (PI / n) * (10.0f * std::pow(std::sin(PI * y_primero), 2) +
-                                 suma_y + std::pow(y_ultimo - 1.0f, 2)) +
-                     suma_u;
-    break;
-  }
-
-  default:
-    cerr << "[ERROR] Función " << this->funcion_seleccionada
-         << " no implementada." << endl;
-    valor_objetivo = 0.0f;
-    break;
-  }
-
-  return valor_objetivo;
+void algoritmogeneticsimple::fit(const vector<float> &X,
+                                 const vector<float> &Y) {
+  this->X = X;
+  this->Y = Y;
 }
