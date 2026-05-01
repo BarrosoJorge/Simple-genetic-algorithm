@@ -17,7 +17,8 @@ algoritmogeneticsimple::algoritmogeneticsimple(
     const vector<unsigned int> &_bits_por_gen,
     const vector<float> &_limites_superiores,
     const vector<float> &_limites_inferiores, const float &probabilidad_cruza,
-    const float &probabilidad_mutacion, const unsigned int &m) {
+    const float &probabilidad_mutacion, const unsigned int &m,
+    const unsigned int &max_gen) {
   this->tamaño_poblacion = _tamaño_poblacion;
   this->num_genes = _num_genes;
   this->bits_por_gen = _bits_por_gen;
@@ -26,6 +27,7 @@ algoritmogeneticsimple::algoritmogeneticsimple(
   this->probabilidad_cruza = probabilidad_cruza;
   this->probabilidad_mutacion = probabilidad_mutacion;
   this->tamaño_cromosoma = 0;
+  this->max_gen = max_gen;
   this->m = m;
   // Calcular el tamaño del cromosoma
   for (unsigned int k = 0; k < this->num_genes; k++)
@@ -338,7 +340,24 @@ float algoritmogeneticsimple::FuncionObjetivo(unsigned int _id_individuo) {
   // incompatible
 }
 
-void algoritmogeneticsimple::fit() {}
+void algoritmogeneticsimple::fit(TipoOptimizacion _tipo_optimizacion) {
+  this->DecodificarEnteros();
+  this->DecodificarReales();
+  this->EvaluarPoblacion();
+  this->ConvertirObjetivoAptitud(_tipo_optimizacion);
+  for (unsigned int gen = 1; gen <= this->max_gen; gen++) {
+    this->SeleccionRuleta();
+    this->CruzamientoPuntoUnico(this->probabilidad_cruza);
+    this->Mutar(this->probabilidad_mutacion);
+    this->Elitismo();
+    this->GenerarProximaGeneracion();
+    this->DecodificarEnteros();
+    this->DecodificarReales();
+    this->EvaluarPoblacion();
+    this->ConvertirObjetivoAptitud(_tipo_optimizacion);
+    cout << gen << "," << this->ObtenerMejorObjetivo() << "\n";
+  }
+}
 void algoritmogeneticsimple::fit_gaussian(const DataSet &d) {
   auto model = create_gaussian_model(this->m);
   this->funcion_objetivo = create_mse(d, model);

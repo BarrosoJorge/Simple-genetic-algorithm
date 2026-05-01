@@ -8,7 +8,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(core
     src/ga/sga.cpp
     src/io/reader.cpp
-    src/math/dataset.cpp
+    src/experiments/program.cpp 
+    src/math/dataset.cpp 
+    src/math/gaussian.cpp 
+    src/math/loss.cpp 
+    src/math/model.cpp 
 )
 
 target_include_directories(core PUBLIC lib)
