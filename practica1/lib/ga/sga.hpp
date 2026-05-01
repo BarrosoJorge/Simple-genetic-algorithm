@@ -19,8 +19,8 @@ typedef enum { MAXIMIZAR, MINIMIZAR } TipoOptimizacion;
 
 typedef struct {
   BYTE *cromosoma;
-  unsigned int *valores_enteros;
-  float *valores_reales;
+  vector<unsigned int> valores_enteros;
+  vector<float> valores_reales;
   float valor_objetivo;
   float valor_aptitud;
   unsigned int padre_1;

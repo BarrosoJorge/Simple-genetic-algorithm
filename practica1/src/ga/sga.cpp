@@ -38,12 +38,11 @@ algoritmogeneticsimple::algoritmogeneticsimple(
 
   for (unsigned int k = 0; k < this->tamaño_poblacion; k++) {
     this->poblacion[k].cromosoma = new BYTE[this->tamaño_cromosoma];
-    this->poblacion[k].valores_enteros = new unsigned int[this->num_genes];
-    this->poblacion[k].valores_reales = new float[this->num_genes];
+    this->poblacion[k].valores_enteros.resize(this->num_genes);
+    this->poblacion[k].valores_reales.resize(this->num_genes);
     this->poblacion_nueva[k].cromosoma = new BYTE[this->tamaño_cromosoma];
-    this->poblacion_nueva[k].valores_enteros =
-        new unsigned int[this->num_genes];
-    this->poblacion_nueva[k].valores_reales = new float[this->num_genes];
+    this->poblacion_nueva[k].valores_enteros.resize(this->num_genes);
+    this->poblacion_nueva[k].valores_reales.resize(this->num_genes);
 
     // Inicializar el cromosoma aleatoriamente
     for (unsigned int i = 0; i < this->tamaño_cromosoma; i++)
@@ -59,11 +58,7 @@ algoritmogeneticsimple::algoritmogeneticsimple(
 algoritmogeneticsimple::~algoritmogeneticsimple() {
   for (unsigned int k = 0; k < this->tamaño_poblacion; k++) {
     delete[] this->poblacion[k].cromosoma;
-    delete[] this->poblacion[k].valores_enteros;
-    delete[] this->poblacion[k].valores_reales;
     delete[] this->poblacion_nueva[k].cromosoma;
-    delete[] this->poblacion_nueva[k].valores_enteros;
-    delete[] this->poblacion_nueva[k].valores_reales;
   }
   delete[] this->poblacion;
   delete[] this->poblacion_nueva;
