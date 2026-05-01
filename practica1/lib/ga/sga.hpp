@@ -46,6 +46,7 @@ private:
   float promedio_aptitud;
   float probabilidad_mutacion;
   float probabilidad_cruza;
+  unsigned int max_gen;
   vector<float> X;
   vector<float> Y;
   unsigned int m;
@@ -59,7 +60,7 @@ public:
                          const vector<float> &_limites_inferiores,
                          const float &probabilidad_cruza,
                          const float &probabilidad_mutacion,
-                         const unsigned int &m);
+                         const unsigned int &m, const unsigned int &max_gen);
 
   ~algoritmogeneticsimple();
 
@@ -77,6 +78,6 @@ public:
   void Elitismo(void);
   unsigned int ObtenerMejor(void);
   float ObtenerMejorObjetivo(void);
-  void fit();
+  void fit(TipoOptimizacion _tipo_optimizacion = MINIMIZAR);
   void fit_gaussian(const DataSet &d);
 }; // FIN DE LA CLASE
