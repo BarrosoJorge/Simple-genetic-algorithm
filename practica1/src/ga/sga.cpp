@@ -10,6 +10,7 @@
 #include "ga/sga.hpp"
 #include "math/dataset.h"
 #include "math/loss.hpp"
+#include "math/model.hpp"
 #include <vector>
 
 algoritmogeneticsimple::algoritmogeneticsimple(
@@ -91,11 +92,14 @@ void algoritmogeneticsimple::DecodificarEnteros(void) {
 void algoritmogeneticsimple::DecodificarReales(void) {
   for (unsigned int k = 0; k < this->tamaño_poblacion; k++) {
     for (unsigned int g = 0; g < this->num_genes; g++) {
-      float rango = this->limites_superiores[g] - this->limites_inferiores[g];
-      float denominador = (float)pow(2, this->bits_por_gen[g]) - 1.0f;
-      this->poblacion[k].valores_reales[g] =
-          ((this->poblacion[k].valores_enteros[g] / denominador) * rango) +
-          this->limites_inferiores[g];
+      float maxi = this->limites_superiores[g];
+      float mini = this->limites_inferiores[g];
+      float rango = maxi - mini;
+      float denominador = (float)((1 << this->bits_por_gen[g]) - 1.0f);
+      float normalizado =
+          (float)this->poblacion[k].valores_enteros[g] / denominador;
+
+      this->poblacion[k].valores_reales[g] = mini + normalizado * rango;
     }
   }
 }
@@ -344,6 +348,7 @@ void algoritmogeneticsimple::fit(TipoOptimizacion _tipo_optimizacion) {
   this->DecodificarEnteros();
   this->DecodificarReales();
   this->EvaluarPoblacion();
+  this->ImprimirPoblacion();
   this->ConvertirObjetivoAptitud(_tipo_optimizacion);
   for (unsigned int gen = 1; gen <= this->max_gen; gen++) {
     this->SeleccionRuleta();
