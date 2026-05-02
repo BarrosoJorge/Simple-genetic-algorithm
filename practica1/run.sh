@@ -10,4 +10,4 @@ cmake ..
 
 cmake --build .
 
-./programa -gaussianas 10 -sup 8 3 1 -inf -8 0.2 0 -poblacion 200 -generaciones 1000 -cruza 0.85 -mutacion 0.02 -bits 8
+./programa -gaussianas 1 -sup 5 1 0.3 -inf 0 0 0.05 -poblacion 10 -generaciones 1 -cruza 0.85 -mutacion 0.02 -bits 8

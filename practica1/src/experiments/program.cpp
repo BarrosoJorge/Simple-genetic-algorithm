@@ -12,10 +12,10 @@ Programa Asignacion(int argc, char **argv) {
   config.PROB_MUTACION = 0.01;
   for (int i = 1; i < argc; i++) {
     string arg = argv[i];
-
+    std::cout << "ARG: [" << arg << "]\n";
     if (arg == "-gaussianas" && i + 1 < argc) {
       config.NUM_GENES = atoi(argv[++i]) * 3;
-      config.m = atoi(argv[++i]);
+      config.m = atoi(argv[i]);
       config.BITS_POR_GEN.clear();
       config.LIMITE_SUPERIOR.clear();
       config.LIMITE_INFERIOR.clear();
@@ -71,7 +71,8 @@ Programa Asignacion(int argc, char **argv) {
   }
 
   if (config.LIMITE_SUPERIOR_BASE.size() == 0) {
-    float sup_default, inf_default;
+    float sup_default = 1.0f;
+    float inf_default = 0.0f;
     config.LIMITE_SUPERIOR.assign(config.NUM_GENES, sup_default);
     config.LIMITE_INFERIOR.assign(config.NUM_GENES, inf_default);
     return config;
