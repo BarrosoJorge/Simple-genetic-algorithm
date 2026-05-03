@@ -6,7 +6,9 @@
 int main(int argc, char *argv[]) {
 
   srand((unsigned int)(time(NULL)));
-  DataSet d = load_xy("../data/1_xi.txt", "../data/1_yi.txt");
+  DataSet a = load_xy("../data/1_xi.txt", "../data/1_yi.txt");
+  DataSet b = load_xy("../data/2_xi.txt", "../data/2_yi.txt");
+  DataSet c = load_xy("../data/3_xi.txt", "../data/3_yi.txt");
   Programa experimentos = Asignacion(argc, argv);
 
   algoritmogeneticsimple ga = algoritmogeneticsimple(
@@ -16,5 +18,5 @@ int main(int argc, char *argv[]) {
       experimentos.PROB_MUTACION, experimentos.m,
       experimentos.MAX_GENERACIONES);
 
-  ga.fit_gaussian(d);
+  ga.fit_gaussian(c); //a, b, c
 }
