@@ -18,5 +18,5 @@ int main(int argc, char *argv[]) {
       experimentos.PROB_MUTACION, experimentos.m,
       experimentos.MAX_GENERACIONES);
 
-  ga.fit_gaussian(c); //a, b, c
+  ga.fit_gaussian(b); //a, b, c
 }
