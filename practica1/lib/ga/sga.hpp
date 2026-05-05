@@ -73,6 +73,7 @@ public:
   void ConvertirObjetivoAptitud(TipoOptimizacion _tipo_optimizacion);
   void SeleccionRuleta(void);
   void CruzamientoPuntoUnico(double _probabilidad_cruza);
+  void CruzamientoDoblePunto(double _probabilidad_cruza);
   void Mutar(double _probabilidad_mutacion);
   void GenerarProximaGeneracion(void);
   void Elitismo(void);

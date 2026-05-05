@@ -352,7 +352,7 @@ void algoritmogeneticsimple::fit(TipoOptimizacion _tipo_optimizacion) {
   this->ConvertirObjetivoAptitud(_tipo_optimizacion);
   for (unsigned int gen = 1; gen <= this->max_gen; gen++) {
     this->SeleccionRuleta();
-    this->CruzamientoPuntoUnico(this->probabilidad_cruza);
+    this->CruzamientoDoblePunto(this->probabilidad_cruza);
     this->Mutar(this->probabilidad_mutacion);
     this->Elitismo();
     this->GenerarProximaGeneracion();
@@ -367,4 +367,59 @@ void algoritmogeneticsimple::fit_gaussian(const DataSet &d) {
   auto model = create_gaussian_model(this->m);
   this->funcion_objetivo = create_mse(d, model);
   this->fit();
+}
+void algoritmogeneticsimple::CruzamientoDoblePunto(double _probabilidad_cruza) {
+  unsigned int i, k, punto_cruza_1, punto_cruza_2, padre_1, padre_2;
+  unsigned int limite = this->tamaño_cromosoma - 2;
+  double valor_aleatorio;
+
+  for (k = 0; k < this->tamaño_poblacion; k += 2) {
+    valor_aleatorio = (double)rand() / RAND_MAX;
+
+    if (valor_aleatorio < _probabilidad_cruza) {
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_2;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_1;
+      punto_cruza_1 = rand() % limite;
+      punto_cruza_2 = (punto_cruza_1 + 2) +
+                      rand() % ((this->tamaño_cromosoma) - (punto_cruza_1 + 2));
+
+      for (i = 0; i <= punto_cruza_1; i++) {
+        this->poblacion_nueva[k].cromosoma[i] =
+            this->poblacion[padre_2].cromosoma[i];
+        this->poblacion_nueva[k + 1].cromosoma[i] =
+            this->poblacion[padre_1].cromosoma[i];
+      }
+      for (i = punto_cruza_1 + 1; i < punto_cruza_2; i++) {
+        this->poblacion_nueva[k].cromosoma[i] =
+            this->poblacion[padre_1].cromosoma[i];
+        this->poblacion_nueva[k + 1].cromosoma[i] =
+            this->poblacion[padre_2].cromosoma[i];
+      }
+      for (i = punto_cruza_2; i < this->tamaño_cromosoma; i++) {
+        this->poblacion_nueva[k].cromosoma[i] =
+            this->poblacion[padre_2].cromosoma[i];
+        this->poblacion_nueva[k + 1].cromosoma[i] =
+            this->poblacion[padre_1].cromosoma[i];
+      }
+    } else {
+      // Sin cruzamiento — copiar padres tal cual
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_1;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_2;
+
+      for (i = 0; i < this->tamaño_cromosoma; i++) {
+        this->poblacion_nueva[k].cromosoma[i] =
+            this->poblacion[padre_1].cromosoma[i];
+        this->poblacion_nueva[k + 1].cromosoma[i] =
+            this->poblacion[padre_2].cromosoma[i];
+      }
+    }
+  }
 }
