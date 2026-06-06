@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+BUILD_DIR="build"
+if [ ! -d "$BUILD_DIR" ]; then
+  mkdir $BUILD_DIR
+fi
+cd $BUILD_DIR
+
+cmake ..
+
+cmake --build .
+
+# PRIMERA FUNCION (DataSet a) #
+#./programa -gaussianas 5 -sup 3 1 0.3 -inf -2 0 0.05 -poblacion 500 -generaciones 2000 -cruza 0.8 -mutacion 0.01 -bits 20
+
+# SEGUNDA FUNCION (DataSet b) #
+#./programa -gaussianas 10 -sup 3 1 1 -inf -3 0 0.01 -poblacion 500 -generaciones 2000 -cruza 0.85 -mutacion 0.08 -bits 16
+
+# TERCERA FUNCION (DataSet c) #
+./programa -gaussianas 5 -sup 2 1 0.5 -inf -2 0 0.01 -poblacion 500 -generaciones 2000 -cruza 0.85 -mutacion 0.02 -bits 12
