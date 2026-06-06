@@ -74,6 +74,7 @@ public:
   void SeleccionRuleta(void);
   void CruzamientoPuntoUnico(double _probabilidad_cruza);
   void CruzamientoDoblePunto(double _probabilidad_cruza);
+  void CruzamientoUniforme(double _probabilidad_cruza);
   void Mutar(double _probabilidad_mutacion);
   void GenerarProximaGeneracion(void);
   void Elitismo(void);
@@ -81,4 +82,8 @@ public:
   float ObtenerMejorObjetivo(void);
   void fit(TipoOptimizacion _tipo_optimizacion = MINIMIZAR);
   void fit_gaussian(const DataSet &d);
+  void torneo(const unsigned int &N);
+  void mutaReal(double _probabilidad_mutacion, double delta);
+
+  void CruzaReal(double _probabilidad_cruza);
 }; // FIN DE LA CLASE

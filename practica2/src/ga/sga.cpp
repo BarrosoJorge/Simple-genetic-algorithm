@@ -423,3 +423,134 @@ void algoritmogeneticsimple::CruzamientoDoblePunto(double _probabilidad_cruza) {
     }
   }
 }
+void algoritmogeneticsimple::torneo(const unsigned int &N) {
+  unsigned int i, j, candidato, mejor;
+  for (i = 0; i < this->tamaño_poblacion; i++) {
+    mejor = rand() % this->tamaño_poblacion;
+    for (j = 1; j < N; j++) {
+      candidato = rand() % this->tamaño_poblacion;
+      if (this->poblacion[candidato].valor_aptitud <
+          this->poblacion[mejor].valor_aptitud)
+        mejor = candidato;
+    }
+    this->seleccion[i] = mejor;
+  }
+}
+
+void algoritmogeneticsimple::CruzamientoUniforme(double _probabilidad_cruza) {
+  unsigned int i, k, punto_cruza, padre_1, padre_2;
+  unsigned int limite = this->tamaño_cromosoma - 1;
+  double valor_aleatorio, mascara;
+
+  for (k = 0; k < this->tamaño_poblacion; k += 2) {
+    valor_aleatorio = (double)rand() / RAND_MAX;
+
+    if (valor_aleatorio < _probabilidad_cruza) {
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_2;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_1;
+      punto_cruza = rand() % limite;
+
+      for (i = 0; i <= this->tamaño_cromosoma; i++) {
+        mascara = (double)rand() / RAND_MAX;
+        if (mascara < 0.5) {
+          this->poblacion_nueva[k].cromosoma[i] =
+              this->poblacion[padre_1].cromosoma[i];
+          this->poblacion_nueva[k + 1].cromosoma[i] =
+              this->poblacion[padre_2].cromosoma[i];
+        } else {
+          this->poblacion_nueva[k].cromosoma[i] =
+              this->poblacion[padre_2].cromosoma[i];
+          this->poblacion_nueva[k + 1].cromosoma[i] =
+              this->poblacion[padre_1].cromosoma[i];
+        }
+      }
+
+    } else {
+      // Sin cruzamiento — copiar padres tal cual
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_1;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_2;
+
+      for (i = 0; i < this->tamaño_cromosoma; i++) {
+        this->poblacion_nueva[k].cromosoma[i] =
+            this->poblacion[padre_1].cromosoma[i];
+        this->poblacion_nueva[k + 1].cromosoma[i] =
+            this->poblacion[padre_2].cromosoma[i];
+      }
+    }
+  }
+}
+void algoritmogeneticsimple::CruzaReal(double _probabilidad_cruza) {
+
+  unsigned int i, k, punto_cruza, padre_1, padre_2;
+  unsigned int limite = this->tamaño_cromosoma - 1;
+  double valor_aleatorio;
+
+  for (k = 0; k < this->tamaño_poblacion; k += 2) {
+    valor_aleatorio = (double)rand() / RAND_MAX;
+
+    if (valor_aleatorio < _probabilidad_cruza) {
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_2;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_1;
+      punto_cruza = rand() % limite;
+
+      for (i = 0; i <= punto_cruza; i++) {
+        this->poblacion_nueva[k].valores_reales[i] =
+            this->poblacion[padre_1].valores_reales[i];
+        this->poblacion_nueva[k + 1].valores_reales[i] =
+            this->poblacion[padre_2].valores_reales[i];
+      }
+      for (i = punto_cruza + 1; i < this->tamaño_cromosoma; i++) {
+        this->poblacion_nueva[k].valores_reales[i] =
+            this->poblacion[padre_2].valores_reales[i];
+        this->poblacion_nueva[k + 1].valores_reales[i] =
+            this->poblacion[padre_1].valores_reales[i];
+      }
+    } else {
+      // Sin cruzamiento — copiar padres tal cual
+      padre_1 = this->seleccion[k];
+      padre_2 = this->seleccion[k + 1];
+      this->poblacion_nueva[k].padre_1 = padre_1;
+      this->poblacion_nueva[k].padre_2 = padre_1;
+      this->poblacion_nueva[k + 1].padre_1 = padre_2;
+      this->poblacion_nueva[k + 1].padre_2 = padre_2;
+
+      for (i = 0; i < this->tamaño_cromosoma; i++) {
+        this->poblacion_nueva[k].valores_reales[i] =
+            this->poblacion[padre_1].valores_reales[i];
+        this->poblacion_nueva[k + 1].valores_reales[i] =
+            this->poblacion[padre_2].valores_reales[i];
+      }
+    }
+  }
+}
+
+void algoritmogeneticsimple::mutaReal(double _probabilidad_mutacion,
+                                      double delta) {
+  int k, i;
+  double r;
+  for (k = 0; k < this->tamaño_poblacion; k++) {
+    for (i = 0; i < this->tamaño_cromosoma; i++) {
+      r = (double)rand() / RAND_MAX;
+      if (r < _probabilidad_mutacion) {
+        float &x = this->poblacion_nueva[k].valores_reales[i];
+        x += delta * (((double)rand() / RAND_MAX) - 0.5);
+        if (x < limites_inferiores[i])
+          x = limites_inferiores[i];
+        if (x > limites_superiores[i])
+          x = limites_superiores[i];
+      }
+    }
+  }
+}
