@@ -4,13 +4,27 @@ sga
 *.o
 *.out
 
-# Directorio de CMake
+# Directorios de CMake / CLion
 build/
+cmake-build-debug/
 CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
+.idea/
+.cache/
 
-# Archivos de salida (generados por tu código o python)
-salida.csv
+# Archivos generados por el programa C++
+resultado_*.bmp
+resultados_circulos.csv
+
+# Archivos generados por Python
 *.png
+resultados/
+
+# Carpeta imgs raíz (duplicado de data/)
+imgs/
+
+# Documentos de entrega (PDF y notas)
+Proyecto2.pdf
+Resultados (1).md
